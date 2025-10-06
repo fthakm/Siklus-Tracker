@@ -1,47 +1,34 @@
-import supabase from "../supabaseClient";
-
+import supabase from "./supabaseClient";
 const TABLE = "latihan_sessions";
 
-// Semua sesi latihan
+/**
+ * Service untuk sesi latihan & ringkasan hasil
+ */
+
 export async function getLatihanSessions() {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("*, session_participants(*)")
+    .select("*, category_id")
     .order("scheduled_at", { ascending: false });
   if (error) throw error;
   return data;
 }
 
-// Tambah atau update sesi
 export async function saveLatihanSession(payload) {
-  if (!payload.id) {
-    const { data, error } = await supabase
-      .from(TABLE)
-      .insert([payload])
-      .select()
-      .single();
-    if (error) throw error;
-    return data;
-  } else {
-    const { data, error } = await supabase
-      .from(TABLE)
-      .update(payload)
-      .eq("id", payload.id)
-      .select()
-      .single();
-    if (error) throw error;
-    return data;
-  }
+  const { id, ...rest } = payload;
+  const query = id
+    ? supabase.from(TABLE).update(rest).eq("id", id).select().single()
+    : supabase.from(TABLE).insert([rest]).select().single();
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
 }
 
-// Hapus sesi latihan
 export async function deleteLatihanSession(id) {
   const { error } = await supabase.from(TABLE).delete().eq("id", id);
   if (error) throw error;
-  return true;
 }
 
-// Ringkasan latihan per sesi
 export async function getLatihanSummary(sessionId) {
   const { data, error } = await supabase
     .from("evaluations")
