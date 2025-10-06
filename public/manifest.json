@@ -1,0 +1,21 @@
+{
+  "short_name": "Siklus",
+  "name": "Siklus Tracker",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1976d2",
+  "background_color": "#ffffff",
+  "description": "Siklus Tracker — A modern student fitness performance app built with React and Supabase."
+}
