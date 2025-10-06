@@ -1,0 +1,5 @@
+<!-- logo.svg -->
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="90" cy="90" r="90" fill="#007BFF"/>
+  <text x="50%" y="55%" text-anchor="middle" fill="white" font-size="48" font-family="Arial, Helvetica, sans-serif" dy=".3em">ST</text>
+</svg>
