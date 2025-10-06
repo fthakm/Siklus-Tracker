@@ -1,15 +1,29 @@
-import supabase from "../supabaseClient";
+import supabase from "./supabaseClient";
 
-export async function getLeaderboard() {
-  const { data, error } = await supabase
+/**
+ * Leaderboard Service
+ * - Ambil data agregasi dari student_results
+ * - Bisa difilter berdasarkan kategori
+ */
+
+export async function getLeaderboard(category = "all") {
+  let query = supabase
     .from("student_results")
-    .select("students(full_name), score_avg")
+    .select("student_id, students(full_name), category_id, score_avg, attendance_count")
+    .leftJoin("students", { student_id: "id" })
     .order("score_avg", { ascending: false });
+
+  if (category !== "all") {
+    query = query.eq("category_id", category);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
 
-  return data.map((item, i) => ({
-    rank: i + 1,
-    name: item.students?.full_name,
-    score: item.score_avg,
+  return data.map((r) => ({
+    id: r.student_id,
+    name: r.students?.full_name,
+    average_score: r.score_avg,
+    attendance_rate: r.attendance_count,
   }));
 }
